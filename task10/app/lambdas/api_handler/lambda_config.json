@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "name": "demo",
+  "func_name": "handler.lambda_handler",
+  "resource_type": "lambda",
+  "iam_role_name": "demo-role",
+  "runtime": "nodejs20.x",
+  "memory": 128,
+  "timeout": 100,
+  "lambda_path": "lambdas\\demo",
+  "dependencies": [
+    {
+      "resource_name": "${booking_userpool}",
+      "resource_type": "cognito_idp"
+    }
+  ],
+  "event_sources": [],
+  "env_variables": {
+    "cup_id": {
+      "resource_name": "${booking_userpool}",
+      "resource_type": "cognito_idp",
+      "parameter": "id"
+      },
+    "cup_client_id": {
+      "resource_name": "${booking_userpool}",
+      "resource_type": "cognito_idp",
+      "parameter": "client_id"
+      
+	  }},
+    
+  "publish_version": false,
+  "url_config": {},
+  "ephemeral_storage": 512,
+  "logs_expiration": "${logs_expiration}",
+  "layers": []
+}
