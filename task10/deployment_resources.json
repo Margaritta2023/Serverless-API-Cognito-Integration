@@ -23,6 +23,7 @@
             "cognito-idp:ListUserPoolClients",
             "cognito-idp:AdminRespondToAuthChallenge",
             "cognito-idp:AdminConfirmSignUp"
+          
           ],
           "Effect": "Allow",
           "Resource": "*"
@@ -155,7 +156,13 @@
     "hash_key_type": "N",
     "read_capacity": 1,
     "write_capacity": 1,
-    "global_indexes": [],
+    "global_indexes": [
+		  {
+			"name": "number-index",
+			"index_key_name": "number",
+			"index_key_type": "N"
+		  }
+		],
     "autoscaling": [],
     "tags": {}
   },
@@ -165,7 +172,13 @@
     "hash_key_type": "N",
     "read_capacity": 1,
     "write_capacity": 1,
-    "global_indexes": [],
+   "global_indexes": [
+		  {
+			"name": "number-index",
+			"index_key_name": "number",
+			"index_key_type": "N"
+		  }
+		],
     "autoscaling": [],
     "tags": {}
   },
