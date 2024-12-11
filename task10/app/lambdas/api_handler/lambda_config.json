@@ -8,6 +8,7 @@
   "memory": 128,
   "timeout": 100,
   "lambda_path": "lambdas/api_handler",
+  "alias": "learn",
   "dependencies": [
     {
       "resource_name": "${booking_userpool}",
