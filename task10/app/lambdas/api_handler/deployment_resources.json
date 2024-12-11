@@ -3,9 +3,9 @@
     "predefined_policies": [],
     "principal_service": "lambda",
     "custom_policies": [
-      "lambda-basic-execution"
+      "lambda-basic-execution",
+      "lambda-custom-execution"
     ],
-    "resource_type": "iam_role",
-    "tags": {}
+    "resource_type": "iam_role"
   }
 }

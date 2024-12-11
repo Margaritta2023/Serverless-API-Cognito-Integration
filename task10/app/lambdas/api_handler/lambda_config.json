@@ -7,40 +7,29 @@
   "runtime": "nodejs20.x",
   "memory": 128,
   "timeout": 100,
-  "lambda_path": "lambdas\\api_handler",
-  "event_sources": [],
-  "publish_version": true,
-  "alias": "${lambdas_alias_name}",
+  "lambda_path": "lambdas/api_handler",
   "dependencies": [
     {
       "resource_name": "${booking_userpool}",
       "resource_type": "cognito_idp"
-    },
-    {
-      "resource_name":"${tables_table}",
-      "resource_type":"dynamodb_table"
-    },
-    {
-      "resource_name":"${reservations_table}",
-      "resource_type":"dynamodb_table"
     }
   ],
- 
+  "event_sources": [],
   "env_variables": {
-    "USERPOOL": {
+    "CUPId": {
       "resource_name": "${booking_userpool}",
       "resource_type": "cognito_idp",
       "parameter": "id"
     },
-    "USERPOOLCLIENT": {
+    "CUPClientId": {
       "resource_name": "${booking_userpool}",
       "resource_type": "cognito_idp",
       "parameter": "client_id"
     },
-    "TABLE": "${tables_table}",
-    "RESERVATION": "${reservations_table}"
+    "tables_table": "${tables_table}",
+    "reservations_table": "${reservations_table}"
   },
+  "publish_version": false,
   "url_config": {},
-  "ephemeral_storage": 512,
-  "tags": {}
+  "ephemeral_storage": 512
 }

@@ -12,7 +12,23 @@
             "dynamodb:PutItem",
             "dynamodb:Batch*",
             "dynamodb:DeleteItem",
-            "dynamodb:Scan",
+            "ssm:PutParameter",
+            "ssm:GetParameter",
+            "kms:Decrypt"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+        }
+      ],
+      "Version": "2012-10-17"
+    },
+    "resource_type": "iam_policy"
+  },
+  "lambda-custom-execution": {
+    "policy_content": {
+      "Statement": [
+        {
+          "Action": [
             "cognito-idp:DescribeUserPool",
             "cognito-idp:GetUser",
             "cognito-idp:ListUsers",
@@ -22,8 +38,13 @@
             "cognito-idp:ListUserPools",
             "cognito-idp:ListUserPoolClients",
             "cognito-idp:AdminRespondToAuthChallenge",
-            "cognito-idp:AdminConfirmSignUp"
-          
+            "cognito-idp:AdminConfirmSignUp",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "dynamodb:PutItem",
+            "dynamodb:Batch*",
+            "dynamodb:DeleteItem",
+            "dynamodb:Scan"
           ],
           "Effect": "Allow",
           "Resource": "*"
@@ -34,19 +55,24 @@
     "resource_type": "iam_policy"
   },
   "task10_api": {
-    "resource_type": "api_gateway",
-    "deploy_stage": "api",
-    "dependencies": [],
     "authorizers": {
       "authorizer": {
         "type": "COGNITO_USER_POOLS",
         "identity_source": "method.request.header.Authorization",
         "ttl": 300,
         "user_pools": [
-          "${booking_userpool}"
+          "simple-booking-userpool"
         ]
       }
     },
+    "resource_type": "api_gateway",
+    "deploy_stage": "api",
+    "dependencies": [
+      {
+        "resource_name": "api_handler",
+        "resource_type": "lambda"
+      }
+    ],
     "resources": {
       "/signin": {
         "enable_cors": true,
@@ -64,7 +90,7 @@
         }
       },
       "/signup": {
-        "enable_cors": false,
+        "enable_cors": true,
         "POST": {
           "authorization_type": "NONE",
           "integration_type": "lambda",
@@ -148,23 +174,7 @@
         }
       }
     },
-    "tags": {}
-  },
-  "${reservations_table}": {
-    "resource_type": "dynamodb_table",
-    "hash_key_name": "id",
-    "hash_key_type": "N",
-    "read_capacity": 1,
-    "write_capacity": 1,
-    "global_indexes": [
-		  {
-			"name": "number-index",
-			"index_key_name": "number",
-			"index_key_type": "N"
-		  }
-		],
-    "autoscaling": [],
-    "tags": {}
+    "minimum_compression_size": 0
   },
   "${tables_table}": {
     "resource_type": "dynamodb_table",
@@ -172,17 +182,18 @@
     "hash_key_type": "N",
     "read_capacity": 1,
     "write_capacity": 1,
-   "global_indexes": [
-		  {
-			"name": "number-index",
-			"index_key_name": "number",
-			"index_key_type": "N"
-		  }
-		],
-    "autoscaling": [],
-    "tags": {}
+    "global_indexes": [],
+    "autoscaling": []
   },
- 
+  "${reservations_table}": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "id",
+    "hash_key_type": "S",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [],
+    "autoscaling": []
+  },
   "${booking_userpool}": {
     "resource_type": "cognito_idp",
     "password_policy": {
@@ -195,7 +206,6 @@
     "auto_verified_attributes": [],
     "sms_configuration": {},
     "username_attributes": [],
-    "custom_attributes": [],
     "client": {
       "client_name": "client-app",
       "generate_secret": false,
@@ -203,10 +213,9 @@
         "ALLOW_ADMIN_USER_PASSWORD_AUTH",
         "ALLOW_CUSTOM_AUTH",
         "ALLOW_USER_SRP_AUTH",
-        "ALLOW_REFRESH_TOKEN_AUTH"
+        "ALLOW_REFRESH_TOKEN_AUTH",
+        "ALLOW_USER_PASSWORD_AUTH"
       ]
-    },
-    "tags": {}
+    }
   }
-
 }
